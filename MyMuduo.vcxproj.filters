@@ -1,0 +1,486 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="muduo_src\muduo\base\tests\AsyncLogging_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\Atomic_unittest.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\BlockingQueue_bench.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\BlockingQueue_bench2.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\BlockingQueue_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\BoundedBlockingQueue_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\Date_unittest.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\Exception_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\FileUtil_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\Fork_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\GzipFile_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\LogFile_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\Logging_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\LogStream_bench.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\LogStream_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\Mutex_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\ProcessInfo_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\Singleton_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\SingletonThreadLocal_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\Thread_bench.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\Thread_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\ThreadLocal_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\ThreadLocalSingleton_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\ThreadPool_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\Timestamp_unittest.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\TimeZone_unittest.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\tests\TimeZone_util.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\AsyncLogging.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\Condition.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\CountDownLatch.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\CurrentThread.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\Date.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\Exception.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\FileUtil.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\LogFile.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\Logging.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\LogStream.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\ProcessInfo.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\Thread.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\ThreadPool.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\Timestamp.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\base\TimeZone.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\http\tests\HttpRequest_unittest.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\http\tests\HttpServer_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\http\HttpContext.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\http\HttpResponse.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\http\HttpServer.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\inspect\tests\Inspector_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\inspect\Inspector.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\inspect\PerformanceInspector.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\inspect\ProcessInspector.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\inspect\SystemInspector.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\poller\DefaultPoller.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\poller\EPollPoller.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\poller\PollPoller.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\protobuf\ProtobufCodecLite.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\protorpc\RpcChannel.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\protorpc\RpcCodec.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\protorpc\RpcCodec_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\protorpc\RpcServer.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\tests\Buffer_unittest.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\tests\Channel_test.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\tests\EchoClient_unittest.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\tests\EchoServer_unittest.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\tests\EventLoop_unittest.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\tests\EventLoopThread_unittest.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\tests\EventLoopThreadPool_unittest.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\tests\InetAddress_unittest.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\tests\TcpClient_reg1.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\tests\TcpClient_reg2.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\tests\TcpClient_reg3.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\tests\TimerQueue_unittest.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\tests\ZlibStream_unittest.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\Acceptor.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\boilerplate.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\Buffer.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\Channel.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\Connector.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\EventLoop.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\EventLoopThread.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\EventLoopThreadPool.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\InetAddress.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\Poller.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\Socket.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\SocketsOps.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\TcpClient.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\TcpConnection.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\TcpServer.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\Timer.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="muduo_src\muduo\net\TimerQueue.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="muduo_src\muduo\base\AsyncLogging.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\Atomic.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\BlockingQueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\BoundedBlockingQueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\Condition.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\copyable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\CountDownLatch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\CurrentThread.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\Date.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\Exception.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\FileUtil.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\GzipFile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\LogFile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\Logging.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\LogStream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\Mutex.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\noncopyable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\ProcessInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\Singleton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\StringPiece.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\Thread.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\ThreadLocal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\ThreadLocalSingleton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\ThreadPool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\Timestamp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\TimeZone.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\Types.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\base\WeakCallback.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\http\HttpContext.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\http\HttpRequest.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\http\HttpResponse.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\http\HttpServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\inspect\Inspector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\inspect\PerformanceInspector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\inspect\ProcessInspector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\inspect\SystemInspector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\poller\EPollPoller.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\poller\PollPoller.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\protobuf\BufferStream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\protobuf\ProtobufCodecLite.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\protorpc\google-inl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\protorpc\RpcChannel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\protorpc\RpcCodec.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\protorpc\RpcServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\Acceptor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\boilerplate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\Buffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\Callbacks.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\Channel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\Connector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\Endian.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\EventLoop.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\EventLoopThread.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\EventLoopThreadPool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\InetAddress.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\Poller.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\Socket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\SocketsOps.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\TcpClient.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\TcpConnection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\TcpServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\Timer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\TimerId.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\TimerQueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="muduo_src\muduo\net\ZlibStream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
