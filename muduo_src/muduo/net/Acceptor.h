@@ -34,10 +34,11 @@ class Acceptor : noncopyable
 
   Acceptor(EventLoop* loop, const InetAddress& listenAddr, bool reuseport);
   ~Acceptor();
-
+  // 由TcpServer构造时赋值给Acceptor，然后Acceptor再给Channel
   void setNewConnectionCallback(const NewConnectionCallback& cb)
   { newConnectionCallback_ = cb; }
 
+  // 由TcpServer::start()启动，通过acceptSocket_开启监听，然后将acceptChannel_注册（监听新用户的连接请求）
   void listen();
 
   bool listening() const { return listening_; }
@@ -47,12 +48,13 @@ class Acceptor : noncopyable
   // bool listenning() const { return listening(); }
 
  private:
+  // 由Channel回调时执行，实现::accept()，然后执行newConnectionCallback_(TcpServer::newConnection)
   void handleRead();
 
-  EventLoop* loop_;
-  Socket acceptSocket_;
-  Channel acceptChannel_;
-  NewConnectionCallback newConnectionCallback_;
+  EventLoop* loop_;			// 所属于的 loop，就是主Reactor
+  Socket acceptSocket_;		// 保存创建的非阻塞 socket fd
+  Channel acceptChannel_;	// 负责 socket 上事件的注册、回调
+  NewConnectionCallback newConnectionCallback_;	// 将新的连接分发到一个子IO线程下的 EventLoop
   bool listening_;
   int idleFd_;
 };

@@ -42,22 +42,21 @@ EventLoopThread::~EventLoopThread()
 EventLoop* EventLoopThread::startLoop()
 {
   assert(!thread_.started());
-  thread_.start();              // 创建线程，线程下执行 threadFunc()
+  thread_.start();          // 创建线程 pthread_create，执行 threadFunc()
 
-  EventLoop* loop = NULL;
+  EventLoop* loop = NULL;       
   {
     MutexLockGuard lock(mutex_);
-    while (loop_ == NULL)		// 条件变量等待直到线程内的 loop 创建成功
+    while (loop_ == NULL)	// 阻塞条件变量... 直到线程内的 loop 创建成功
     {
       cond_.wait();
     }
-    loop = loop_;				// 在 threadFunc()中的 loop 启动循环之前就获取到了 loop
+    loop = loop_;			// 在 threadFunc()中的 loop 启动循环之前就获取到了 loop
   }
 
-  return loop;
+  return loop;              // 返回新线程下创建的 loop
 }
 
-/* thread_.start() 后，在另一个新建线程下执行 threadFunc() */
 void EventLoopThread::threadFunc()
 {
   EventLoop loop;		// 新线程下重新创建的 loop 为局部对象，生命期直到 .quit()

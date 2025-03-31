@@ -17,8 +17,8 @@
 
 // INADDR_ANY use (type)value casting.
 #pragma GCC diagnostic ignored "-Wold-style-cast"
-static const in_addr_t kInaddrAny = INADDR_ANY;
-static const in_addr_t kInaddrLoopback = INADDR_LOOPBACK;
+static const in_addr_t kInaddrAny = INADDR_ANY;     // INADDR_ANY（0.0.0.0）：表示 任意可用 IP 地址
+static const in_addr_t kInaddrLoopback = INADDR_LOOPBACK;   // (127.0.0.1）：表示 回环地址，用于本机通信（localhost）
 #pragma GCC diagnostic error "-Wold-style-cast"
 
 //     /* Structure describing an Internet socket address.  */

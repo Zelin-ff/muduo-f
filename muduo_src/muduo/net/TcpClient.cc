@@ -59,7 +59,7 @@ TcpClient::TcpClient(EventLoop* loop,
     name_(nameArg),
     connectionCallback_(defaultConnectionCallback),
     messageCallback_(defaultMessageCallback),
-    retry_(false),
+    retry_(false),      // …Ë÷√÷ÿ ‘
     connect_(true),
     nextConnId_(1)
 {

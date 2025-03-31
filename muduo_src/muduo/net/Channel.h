@@ -25,11 +25,9 @@ namespace net
 class EventLoop;
 
 ///
-/// A selectable I/O channel.
-///
-/// This class doesn't own the file descriptor.
-/// The file descriptor could be a socket,
-/// an eventfd, a timerfd, or a signalfd
+///  A selectable I/O channel.
+/// Channel 类不拥有 file descriptor（可以是：eventfd，timerfd，signalfd）
+/// 
 class Channel : noncopyable
 {
  public:
@@ -38,8 +36,10 @@ class Channel : noncopyable
 
   Channel(EventLoop* loop, int fd);
   ~Channel();
-
+  // 资源（TcpConnection）安全地回调处理
   void handleEvent(Timestamp receiveTime);
+
+  /* 设置不同事件类型的回调函数 */
   void setReadCallback(ReadEventCallback cb)
   { readCallback_ = std::move(cb); }
   void setWriteCallback(EventCallback cb)
@@ -49,8 +49,8 @@ class Channel : noncopyable
   void setErrorCallback(EventCallback cb)
   { errorCallback_ = std::move(cb); }
 
-  /// Tie this channel to the owner object managed by shared_ptr,
-  /// prevent the owner object being destroyed in handleEvent.
+  // 将Channel对象绑定到所有者对象（managed by shared_ptr）
+  // 防止在执行 handleEvent() 过程中所有者对象被摧毁
   void tie(const std::shared_ptr<void>&);
 
   int fd() const { return fd_; }
@@ -59,13 +59,14 @@ class Channel : noncopyable
   // int revents() const { return revents_; }
   bool isNoneEvent() const { return events_ == kNoneEvent; }
 
+  /* epoll_ctl()注册、移除 fd 上的感兴趣事件 */
   void enableReading() { events_ |= kReadEvent; update(); }
   void disableReading() { events_ &= ~kReadEvent; update(); }
   void enableWriting() { events_ |= kWriteEvent; update(); }
   void disableWriting() { events_ &= ~kWriteEvent; update(); }
   void disableAll() { events_ = kNoneEvent; update(); }
-  bool isWriting() const { return events_ & kWriteEvent; }
-  bool isReading() const { return events_ & kReadEvent; }
+  bool isWriting() const { return events_ & kWriteEvent; }	// 判断是否可写
+  bool isReading() const { return events_ & kReadEvent; }	// 判断是否可读
 
   // for Poller
   int index() { return index_; }
@@ -78,12 +79,14 @@ class Channel : noncopyable
   void doNotLogHup() { logHup_ = false; }
 
   EventLoop* ownerLoop() { return loop_; }
+  // loop_将channel从poller中移除
   void remove();
 
  private:
   static string eventsToString(int fd, int ev);
 
   void update();
+  // 根据触发事件的类型回调处理函数
   void handleEventWithGuard(Timestamp receiveTime);
 
   static const int kNoneEvent;
@@ -91,19 +94,19 @@ class Channel : noncopyable
   static const int kWriteEvent;
 
   EventLoop* loop_;
-  const int  fd_;
-  int        events_;	// 关心的IO事件、定时器事件
-  int        revents_;	// 目前活动的事件 it's the received event types of epoll or poll
-  int        index_;	// used by Poller.
+  const int  fd_;	
+  int        events_;		// 添加到监听的感兴趣事件：IO事件、定时器任务
+  int        revents_;		// 监听到触发的事件，通过epoll、poll获得
+  int        index_;		// used by Poller.
   bool       logHup_;
 
-  std::weak_ptr<void> tie_;		// 指向绑定的资源
+  std::weak_ptr<void> tie_;	// 指向绑定的资源，思考弱引用的含义？
   bool tied_;
   bool eventHandling_;
   bool addedToLoop_;
-  ReadEventCallback readCallback_;
+  ReadEventCallback readCallback_;		// 需要一个参数 Timestamp
   EventCallback writeCallback_;
-  EventCallback closeCallback_;
+  EventCallback closeCallback_;			// 调用 TcpConnection::handleClose()
   EventCallback errorCallback_;
 };
 

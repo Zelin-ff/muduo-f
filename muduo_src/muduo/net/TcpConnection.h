@@ -19,6 +19,7 @@
 #include "muduo/net/InetAddress.h"
 
 #include <memory>
+#include <atomic>       // 修改 state_
 
 #include <boost/any.hpp>
 
@@ -105,20 +106,24 @@ class TcpConnection : noncopyable,
   Buffer* outputBuffer()
   { return &outputBuffer_; }
 
-  /* 通知TcpServer/TcpClient移除它们所持有的TcpConnectionPtr Internal use only. */
+  // 通知TcpServer/TcpClient移除它们所持有的TcpConnectionPtr
   void setCloseCallback(const CloseCallback& cb)
   { closeCallback_ = cb; }
 
-  // TcpServer 接受一个新的连接时调用
+  // 连接建立后 注册事件到poller中进行监听（Channel_处理）
   void connectEstablished();
-  // TcpServer 被移除时调用
+  // channel_
   void connectDestroyed();
+
 
  private:
   enum StateE { kDisconnected, kConnecting, kConnected, kDisconnecting };
-  
+  void setState(StateE s) { state_ = s; }
+  const char* stateToString() const;
+
+  // 这些事件被触发后，由 Channel 调用执行
   void handleRead(Timestamp receiveTime);	/* 可读事件通过回调 MessageCallback 传达给客户 */
-  void handleWrite();						/* 自己处理可写事件 */
+  void handleWrite();						// 自己处理可写事件
   void handleClose();
   void handleError();
   
@@ -129,36 +134,45 @@ class TcpConnection : noncopyable,
   // void shutdownAndForceCloseInLoop(double seconds);
   
   void forceCloseInLoop();
-  void setState(StateE s) { state_ = s; }
-  const char* stateToString() const;
   void startReadInLoop();
   void stopReadInLoop();
 
-  EventLoop* loop_;
+
+
+  EventLoop* loop_;     // 当前连接所属的一个 subLoop，conn 由子loop管理
   const string name_;
-  StateE state_;  // FIXME: use atomic variable
+  //StateE state_;  // FIXME: use atomic variable
+  std::atomic_int state_;
   bool reading_;
+
   // we don't expose those classes to client.
   std::unique_ptr<Socket> socket_;
   std::unique_ptr<Channel> channel_;
+
   const InetAddress localAddr_;
   const InetAddress peerAddr_;
+
+  // 下面的回调在创建新连接将其封装为conn对象时，由TcpServer提供初始化
   ConnectionCallback connectionCallback_;
   MessageCallback messageCallback_;
   WriteCompleteCallback writeCompleteCallback_;
   HighWaterMarkCallback highWaterMarkCallback_;
-  CloseCallback closeCallback_;
-  size_t highWaterMark_;
-  Buffer inputBuffer_;
-  Buffer outputBuffer_; // FIXME: use list<Buffer> as output buffer.
+
+  CloseCallback closeCallback_;         // 供TcpServer、TcpClient使用，通知它们移除所持有的TcpConnectionPtr
+  
+  size_t highWaterMark_;        // 数据量高水位限制
+  // 属于连接用户的缓冲区
+  Buffer inputBuffer_;      // onMessage() 回调中读取 
+  Buffer outputBuffer_;     // send()发送数据时使用 当TCP发送缓冲区达到高水位限制时，将待发送数据暂存在这里
 
   boost::any context_;			/* 保存用户上下文，例如 FILE* */
   
   // FIXME: creationTime_, lastReceiveTime_
   //        bytesReceived_, bytesSent_
-};
+};// end TcpConnecion class
 
-typedef std::shared_ptr<TcpConnection> TcpConnectionPtr;
+
+typedef std::shared_ptr<TcpConnection> TcpConnectionPtr;    // shared_ptr管理TcpConnection
 
 }  // namespace net
 }  // namespace muduo

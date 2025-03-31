@@ -46,7 +46,7 @@ Channel::~Channel()
 
 void Channel::tie(const std::shared_ptr<void>& obj)
 {
-  tie_ = obj;
+  tie_ = obj;       // shared_ptr 赋值给 weak_ptr 后不会增加引用计数
   tied_ = true;
 }
 
@@ -65,19 +65,19 @@ void Channel::remove()
 
 void Channel::handleEvent(Timestamp receiveTime)
 {
-  std::shared_ptr<void> guard;	/* 保证处理事件过程中资源不会被释放 */
-  if (tied_)	/* 表示当前channel对象是否绑定了共享资源 */
-  {
-    guard = tie_.lock();	/* 尝试提升指针引用强度，成功则说明资源仍然存在 */
-    if (guard)
+    std::shared_ptr<void> guard;    
+    if (tied_)	    // 尝试提取上层的TcpConnection对象，防止初始事件过程中conn被销毁
     {
-      handleEventWithGuard(receiveTime);
+        guard = tie_.lock();    // 尝试提升引用强度，
+        if (guard)
+        {                       // 提升成功则说明资源仍然存在，继续处理事件，否则没有动作
+            handleEventWithGuard(receiveTime);
+        }
     }
-  }
-  else
-  {
-    handleEventWithGuard(receiveTime);
-  }
+    else
+    {
+        handleEventWithGuard(receiveTime);
+    }
 }
 
 void Channel::handleEventWithGuard(Timestamp receiveTime)

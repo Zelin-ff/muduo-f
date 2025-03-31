@@ -31,7 +31,7 @@ void onConnection(const TcpConnectionPtr& conn)
     FILE* fp = ::fopen(g_file, "rb");
     if (fp)
     {
-      FilePtr ctx(fp, ::fclose);
+      FilePtr ctx(fp, ::fclose);        // shared_ptr 默认用delete释放资源，对于FILE对象需要自定义删除器
       conn->setContext(ctx);
       char buf[kBufSize];
       size_t nread = ::fread(buf, 1, sizeof buf, fp);

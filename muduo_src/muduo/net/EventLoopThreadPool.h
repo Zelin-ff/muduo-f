@@ -35,10 +35,10 @@ class EventLoopThreadPool : noncopyable
   EventLoopThreadPool(EventLoop* baseLoop, const string& nameArg);
   ~EventLoopThreadPool();
   void setThreadNum(int numThreads) { numThreads_ = numThreads; }
+  // 创建 numThreads_ 个IO线程下的EventLoop
   void start(const ThreadInitCallback& cb = ThreadInitCallback());
 
-  // valid after calling start()
-  /// round-robin
+  // 轮询获取 loop
   EventLoop* getNextLoop();
 
   /// with the same hash code, it will always return the same EventLoop

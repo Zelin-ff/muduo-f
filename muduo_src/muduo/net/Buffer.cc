@@ -10,9 +10,10 @@
 #include "muduo/net/Buffer.h"
 
 #include "muduo/net/SocketsOps.h"
-
 #include <errno.h>
 #include <sys/uio.h>
+#include <unistd.h>         // 供writeFd()实现
+
 
 using namespace muduo;
 using namespace muduo::net;
@@ -24,35 +25,44 @@ const size_t Buffer::kInitialSize;
 
 ssize_t Buffer::readFd(int fd, int* savedErrno)
 {
-  // saved an ioctl()/FIONREAD call to tell how much to read
-  char extrabuf[65536];			// 64KB的额外缓存区
-  struct iovec vec[2];			// 缓存区描述数组：用于保存Buffer和extrabuf内可写空间的起始位置和长度
-  const size_t writable = writableBytes();			// 获取Buffer中可写的字节数
-  vec[0].iov_base = begin()+writerIndex_;
+  char extrabuf[65536];			//（1）额外栈上内存
+  struct iovec vec[2];
+  const size_t writable = writableBytes();
+  vec[0].iov_base = begin()+writerIndex_;   // iovec[0]指向 Buffer
   vec[0].iov_len = writable;
-  vec[1].iov_base = extrabuf;
+  vec[1].iov_base = extrabuf;               // iovec[1]指向 extrabuf
   vec[1].iov_len = sizeof extrabuf;
-  // when there is enough space in this buffer, don't read into extrabuf.
-  // when extrabuf is used, we read 128k-1 bytes at most.
+  //（2）当 writable 不足时再使用栈上内存 extrabuf
   const int iovcnt = (writable < sizeof extrabuf) ? 2 : 1;
-  const ssize_t n = sockets::readv(fd, vec, iovcnt);	// 读取数据n
+  //（3）readv 散读特性读取数据
+  const ssize_t n = sockets::readv(fd, vec, iovcnt);
+
   if (n < 0)
   {
-    *savedErrno = errno;			// 记录读取错误
+    *savedErrno = errno;
   }
   else if (implicit_cast<size_t>(n) <= writable)
   {
-    writerIndex_ += n;				// 读取成功且全部存储在Buffer中
+    writerIndex_ += n;				//（4）读入的数据不多时，全部读到 Buffer
   }
   else
   {
-    writerIndex_ = buffer_.size();	// 读取成功但部分存储在Buffer
-    append(extrabuf, n - writable);
+    writerIndex_ = buffer_.size();	//（5）数据超过 Buffer 容量，先读到栈上内存 extrabuf
+    append(extrabuf, n - writable); // 然后 Buffer 腾挪/扩容后，再 copy 栈内存数据 extrabuf
   }
   // if (n == writable + sizeof extrabuf)
   // {
   //   goto line_30;
   // }
   return n;
+}
+
+
+ssize_t Buffer::writeFd(int fd, int* saveErrno) {
+    ssize_t n = ::write(fd, peek(), readableBytes());
+    if (n < 0) {
+        *saveErrno = errno;
+    }
+    return n;
 }
 

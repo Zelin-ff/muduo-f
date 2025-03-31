@@ -23,7 +23,7 @@ class ChatServer : noncopyable
   {
     server_.setConnectionCallback(
         std::bind(&ChatServer::onConnection, this, _1));
-    server_.setMessageCallback(
+    server_.setMessageCallback(     // 注册间接层编解码器的消息回调，然后向codec_注册ChatServer::onStringMessage()
         std::bind(&LengthHeaderCodec::onMessage, &codec_, _1, _2, _3));
   }
 
@@ -55,6 +55,7 @@ class ChatServer : noncopyable
     }
   }
 
+  /* 消息回调：让每个连接所在的 loop 执行 distributeMessage() */
   void onStringMessage(const TcpConnectionPtr&,
                        const string& message,
                        Timestamp)
@@ -74,6 +75,7 @@ class ChatServer : noncopyable
 
   typedef std::set<TcpConnectionPtr> ConnectionList;
 
+  /* 向当前 loop 下所有的用户端连接发送 message */
   void distributeMessage(const string& message)
   {
     LOG_DEBUG << "begin";
@@ -97,7 +99,7 @@ class ChatServer : noncopyable
 
   TcpServer server_;
   LengthHeaderCodec codec_;
-  typedef ThreadLocalSingleton<ConnectionList> LocalConnections;
+  typedef ThreadLocalSingleton<ConnectionList> LocalConnections;    // thread local 变量，实现多线程的高效转发
 
   MutexLock mutex_;
   std::set<EventLoop*> loops_ GUARDED_BY(mutex_);

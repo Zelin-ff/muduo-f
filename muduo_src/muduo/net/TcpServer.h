@@ -68,42 +68,34 @@ class TcpServer : noncopyable
   std::shared_ptr<EventLoopThreadPool> threadPool()
   { return threadPool_; }
 
-  /// Starts the server if it's not listening.
-  ///
-  /// It's harmless to call it multiple times.
-  /// Thread safe.
+  // 如果当前没有监听就启动监听（多次调用也可以、thread safe）
   void start();
 
-  /// Set connection callback.
-  /// Not thread safe.
+  // 下列回调函数的设置都是 not thread safe
   void setConnectionCallback(const ConnectionCallback& cb)
   { connectionCallback_ = cb; }
-
-  /// Set message callback.
-  /// Not thread safe.
   void setMessageCallback(const MessageCallback& cb)
   { messageCallback_ = cb; }
-
-  /// Set write complete callback.
-  /// Not thread safe.
   void setWriteCompleteCallback(const WriteCompleteCallback& cb)
   { writeCompleteCallback_ = cb; }
 
+
  private:
-  /// Not thread safe, but in loop
+  // 封装新的连接为conn对象，线程池中取出一个IO线程并且将新的连接放入
   void newConnection(int sockfd, const InetAddress& peerAddr);
-  /// Thread safe.
+  // 移除连接
   void removeConnection(const TcpConnectionPtr& conn);
-  /// Not thread safe, but in loop
   void removeConnectionInLoop(const TcpConnectionPtr& conn);
 
   typedef std::map<string, TcpConnectionPtr> ConnectionMap;	/* 保存存活的TcpConnectionPtr对象 */
 
-  EventLoop* loop_;  // the acceptor loop
+  EventLoop* loop_;         // the acceptor loop 只负责建立连接
   const string ipPort_;
   const string name_;
-  std::unique_ptr<Acceptor> acceptor_; // avoid revealing Acceptor
+  std::unique_ptr<Acceptor> acceptor_;      // unique_ptr避免Accptor暴露
   std::shared_ptr<EventLoopThreadPool> threadPool_;
+
+  /* TcpServer 的回调成员，都传给了封装新连接后的 conn 对象 */
   ConnectionCallback connectionCallback_;
   MessageCallback messageCallback_;
   WriteCompleteCallback writeCompleteCallback_;
@@ -111,7 +103,7 @@ class TcpServer : noncopyable
   AtomicInt32 started_;
   // always in loop thread
   int nextConnId_;
-  ConnectionMap connections_;
+  ConnectionMap connections_;           // std::map<string, TcpConnectionPtr> 保存连接
 };
 
 }  // namespace net

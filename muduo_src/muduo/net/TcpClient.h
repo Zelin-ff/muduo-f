@@ -49,25 +49,17 @@ class TcpClient : noncopyable
   const string& name() const
   { return name_; }
 
-  /// Set connection callback.
-  /// Not thread safe.
   void setConnectionCallback(ConnectionCallback cb)
   { connectionCallback_ = std::move(cb); }
 
-  /// Set message callback.
-  /// Not thread safe.
   void setMessageCallback(MessageCallback cb)
   { messageCallback_ = std::move(cb); }
 
-  /// Set write complete callback.
-  /// Not thread safe.
   void setWriteCompleteCallback(WriteCompleteCallback cb)
   { writeCompleteCallback_ = std::move(cb); }
 
  private:
-  /// Not thread safe, but in loop
   void newConnection(int sockfd);
-  /// Not thread safe, but in loop
   void removeConnection(const TcpConnectionPtr& conn);
 
   EventLoop* loop_;

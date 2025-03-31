@@ -6,9 +6,11 @@
 #include "muduo/net/Endian.h"
 #include "muduo/net/TcpConnection.h"
 
+/* 编解码器：接受消息时将Buffer->string，发送消息时将string->Buffer */
 class LengthHeaderCodec : muduo::noncopyable
 {
  public:
+  // 参数不再是Buffer*，而是 string类型，让用户代码不再关心分包操作
   typedef std::function<void (const muduo::net::TcpConnectionPtr&,
                                 const muduo::string& message,
                                 muduo::Timestamp)> StringMessageCallback;

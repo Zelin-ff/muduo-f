@@ -30,11 +30,12 @@ class EventLoopThread : noncopyable
   EventLoopThread(const ThreadInitCallback& cb = ThreadInitCallback(),
                   const string& name = string());
   ~EventLoopThread();
-  
-  EventLoop* startLoop();	    // 创建新的线程，并在内部实例化另一个 EventLoop 后并将其返回
+  // 创建新的线程，并在内部实例化另一个 EventLoop 后并将其返回
+  EventLoop* startLoop();
 
  private:
-  void threadFunc();	// 线程启动后在其内部执行，用于创建 loop 并启动
+  // thread_.start() 后，在另一个新建线程下执行 threadFunc()
+  void threadFunc();	
 
   EventLoop* loop_ GUARDED_BY(mutex_);	// 指向线程中创建的 loop
   bool exiting_;

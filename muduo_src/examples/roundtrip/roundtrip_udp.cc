@@ -89,7 +89,7 @@ void clientReadCallback(int sockfd, muduo::Timestamp receiveTime)
     int64_t back = receiveTime.microSecondsSinceEpoch();
     int64_t mine = (back+send)/2;
     LOG_INFO << "round trip " << back - send
-             << " clock error " << their - mine;
+             << " clock offset " << their - mine;
   }
   else
   {

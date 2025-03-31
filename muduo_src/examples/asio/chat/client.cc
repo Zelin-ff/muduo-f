@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
 
     ChatClient client(loopThread.startLoop(), serverAddr);
     client.connect();
-    std::string line;
+    std::string line;   // 从标准输入获取消息，默认换行符为结束标志，直到输入 ctrl+d/z 终止
     while (std::getline(std::cin, line))
     {
       client.write(line);

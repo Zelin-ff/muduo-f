@@ -72,6 +72,8 @@ class DiscardClient : noncopyable
 int main(int argc, char* argv[])
 {
   LOG_INFO << "pid = " << getpid() << ", tid = " << CurrentThread::tid();
+  
+  /* 参数1：地址  参数2：msg_size */
   if (argc > 1)
   {
     EventLoop loop;

@@ -33,7 +33,7 @@ Acceptor::Acceptor(EventLoop* loop, const InetAddress& listenAddr, bool reusepor
   acceptSocket_.setReuseAddr(true);
   acceptSocket_.setReusePort(reuseport);
   acceptSocket_.bindAddress(listenAddr);
-  acceptChannel_.setReadCallback(
+  acceptChannel_.setReadCallback(       // 主Reactor下的Acceptor只需要监听连接，这里只需要注册可读事件（对比TcpConnection的回调设置）
       std::bind(&Acceptor::handleRead, this));
 }
 
@@ -48,8 +48,8 @@ void Acceptor::listen()
 {
   loop_->assertInLoopThread();
   listening_ = true;
-  acceptSocket_.listen();
-  acceptChannel_.enableReading();
+  acceptSocket_.listen();           // 系统调用 ::listen()
+  acceptChannel_.enableReading();   // acceptChannel_ 注册可读事件
 }
 
 void Acceptor::handleRead()
@@ -64,7 +64,7 @@ void Acceptor::handleRead()
     // LOG_TRACE << "Accepts of " << hostport;
     if (newConnectionCallback_)
     {
-      newConnectionCallback_(connfd, peerAddr);
+      newConnectionCallback_(connfd, peerAddr);     // 执行TcpServer::newConnection()
     }
     else
     {

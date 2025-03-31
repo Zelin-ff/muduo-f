@@ -61,6 +61,8 @@ class DiscardServer
     int64_t bytes = newCounter - oldCounter_;
     int64_t msgs = receivedMessages_.getAndSet(0);
     double time = timeDifference(endTime, startTime_);
+
+    // 42.218 MiB/s 14.175 Ki Msgs/s 3049.94 bytes per msg
     printf("%4.3f MiB/s %4.3f Ki Msgs/s %6.2f bytes per msg\n",
         static_cast<double>(bytes)/time/1024/1024,
         static_cast<double>(msgs)/time/1024,
@@ -72,7 +74,7 @@ class DiscardServer
 
   TcpServer server_;
 
-  AtomicInt64 transferred_;
+  AtomicInt64 transferred_;         // 原子操作记录收到的字节数和消息数
   AtomicInt64 receivedMessages_;
   int64_t oldCounter_;
   Timestamp startTime_;

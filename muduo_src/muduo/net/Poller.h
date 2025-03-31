@@ -44,8 +44,7 @@ class Poller : noncopyable
   /// Must be called in the loop thread.
   virtual void updateChannel(Channel* channel) = 0;
 
-  /// Remove the channel, when it destructs.
-  /// Must be called in the loop thread.
+  /// Must be called in the loop thread. 内部 EPOLL_CTL_DEL
   virtual void removeChannel(Channel* channel) = 0;
 
   virtual bool hasChannel(Channel* channel) const;

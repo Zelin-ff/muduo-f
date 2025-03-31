@@ -26,14 +26,14 @@ TcpServer::TcpServer(EventLoop* loop,
   : loop_(CHECK_NOTNULL(loop)),
     ipPort_(listenAddr.toIpPort()),
     name_(nameArg),
-    acceptor_(new Acceptor(loop, listenAddr, option == kReusePort)),
-    threadPool_(new EventLoopThreadPool(loop, name_)),
+    acceptor_(new Acceptor(loop, listenAddr, option == kReusePort)),// 初始化 Acceptor
+    threadPool_(new EventLoopThreadPool(loop, name_)),      // 初始化 EventLoopThreadPool
     connectionCallback_(defaultConnectionCallback),
     messageCallback_(defaultMessageCallback),
     nextConnId_(1)
 {
   acceptor_->setNewConnectionCallback(
-      std::bind(&TcpServer::newConnection, this, _1, _2));
+      std::bind(&TcpServer::newConnection, this, _1, _2));  // 封装新的连接为conn后，分发到子loop
 }
 
 TcpServer::~TcpServer()
@@ -43,7 +43,7 @@ TcpServer::~TcpServer()
 
   for (auto& item : connections_)
   {
-    TcpConnectionPtr conn(item.second);
+    TcpConnectionPtr conn(item.second);     // 获取conn的临时shared_ptr对象
     item.second.reset();
     conn->getLoop()->runInLoop(
       std::bind(&TcpConnection::connectDestroyed, conn));
@@ -60,7 +60,7 @@ void TcpServer::start()
 {
   if (started_.getAndSet(1) == 0)
   {
-    threadPool_->start(threadInitCallback_); /* loop线程池对象创建多个/一个 EventLoopThread */
+    threadPool_->start(threadInitCallback_); /* loop线程池对象创建多个或一个 EventLoopThread */
 
     assert(!acceptor_->listening());
     loop_->runInLoop(
@@ -68,6 +68,9 @@ void TcpServer::start()
   }
 }
 
+// 监听到新连接请求时 -> Channel(acceptSocket_).handleEvent() -> readCallback_ 
+//                 -> Acceptor(listenAddr).handleRead() -> ::accept(“返回参数 sockfd”) -> .newConnectionCallback_
+//                 -> 回调到这里 TcpServer::newConnection()
 void TcpServer::newConnection(int sockfd, const InetAddress& peerAddr)
 {
   loop_->assertInLoopThread();
@@ -76,11 +79,11 @@ void TcpServer::newConnection(int sockfd, const InetAddress& peerAddr)
   snprintf(buf, sizeof buf, "-%s#%d", ipPort_.c_str(), nextConnId_);
   ++nextConnId_;
   string connName = name_ + buf;
-
   LOG_INFO << "TcpServer::newConnection [" << name_
            << "] - new connection [" << connName
            << "] from " << peerAddr.toIpPort();
-  InetAddress localAddr(sockets::getLocalAddr(sockfd));
+
+  InetAddress localAddr(sockets::getLocalAddr(sockfd));     // 通过sockfd获取它绑定的本机的ip地址和端口
   // FIXME poll with zero timeout to double confirm the new connection
   // FIXME use make_shared if necessary
   TcpConnectionPtr conn(new TcpConnection(ioLoop,
@@ -93,8 +96,8 @@ void TcpServer::newConnection(int sockfd, const InetAddress& peerAddr)
   conn->setMessageCallback(messageCallback_);
   conn->setWriteCompleteCallback(writeCompleteCallback_);
   conn->setCloseCallback(
-      std::bind(&TcpServer::removeConnection, this, _1)); // FIXME: unsafe
-  ioLoop->runInLoop(std::bind(&TcpConnection::connectEstablished, conn));
+      std::bind(&TcpServer::removeConnection, this, _1));
+  ioLoop->runInLoop(std::bind(&TcpConnection::connectEstablished, conn));   // 子loop下开始监听connfd上的可读事件
 }
 
 void TcpServer::removeConnection(const TcpConnectionPtr& conn)
@@ -105,14 +108,14 @@ void TcpServer::removeConnection(const TcpConnectionPtr& conn)
 
 void TcpServer::removeConnectionInLoop(const TcpConnectionPtr& conn)
 {
-  loop_->assertInLoopThread();
-  LOG_INFO << "TcpServer::removeConnectionInLoop [" << name_
-           << "] - connection " << conn->name();
-  size_t n = connections_.erase(conn->name());
-  (void)n;
-  assert(n == 1);
-  EventLoop* ioLoop = conn->getLoop();
-  ioLoop->queueInLoop(
-      std::bind(&TcpConnection::connectDestroyed, conn));
+    loop_->assertInLoopThread();
+    LOG_INFO << "TcpServer::removeConnectionInLoop [" << name_
+            << "] - connection " << conn->name();
+    size_t n = connections_.erase(conn->name());
+    (void)n;
+    assert(n == 1);
+    EventLoop* ioLoop = conn->getLoop();
+    ioLoop->queueInLoop(
+        std::bind(&TcpConnection::connectDestroyed, conn));
 }
 

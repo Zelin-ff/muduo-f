@@ -111,22 +111,22 @@ void EventLoop::loop()
   while (!quit_)
   {
     activeChannels_.clear();
-    pollReturnTime_ = poller_->poll(kPollTimeMs, &activeChannels_);
+    pollReturnTime_ = poller_->poll(kPollTimeMs, &activeChannels_);     // epoll_wait
     ++iteration_;
     if (Logger::logLevel() <= Logger::TRACE)
     {
       printActiveChannels();
     }
-    // TODO sort channel by priority
+
     eventHandling_ = true;
-    for (Channel* channel : activeChannels_)
+    for (Channel* channel : activeChannels_)    // 回调处理所有被触发的fd上的事件
     {
       currentActiveChannel_ = channel;
       currentActiveChannel_->handleEvent(pollReturnTime_);
     }
     currentActiveChannel_ = NULL;
     eventHandling_ = false;
-    doPendingFunctors();		// 解决待执行任务（多线程）
+    doPendingFunctors();		// 解决待执行任务（多线程下添加）
   }
 
   LOG_TRACE << "EventLoop " << this << " stop looping";
@@ -147,7 +147,7 @@ void EventLoop::quit()
 
 void EventLoop::runInLoop(Functor cb)
 {
-  if (isInLoopThread())
+  if (isInLoopThread())     // 当前线程时直接执行回调
   {
     cb();
   }
@@ -159,22 +159,19 @@ void EventLoop::runInLoop(Functor cb)
 
 void EventLoop::queueInLoop(Functor cb)
 {
-  {
-  MutexLockGuard lock(mutex_);
-  pendingFunctors_.push_back(std::move(cb));
-  }
-	/* 什么时候唤醒事件循环线程？
-	   第一种情况：当前线程不是事件循环线程；
-	   第二种情况：dopendingFunctors()在处理任务队列过程中，回调函数可能再次调用
-	   			   queueInLoop()去向任务队列继续添加任务，此时也需要唤醒事件循环线程
-	   			   使得在下次事件循环中后添加的任务被及时处理；
-
-	   为什么没有通过在dopendingFunctors()中一直遍历Functors直到队列为空来确定所有
-	   回调被执行，包括后面重新加入的任务回调，因为这样可能会导致陷入死循环    */
-  if (!isInLoopThread() || callingPendingFunctors_)
-  {
-    wakeup();
-  }
+    {   // 加锁后添加回调任务
+        MutexLockGuard lock(mutex_);
+        pendingFunctors_.push_back(std::move(cb));
+    }
+    /* 什么时候唤醒事件循环线程？
+	 * 第一种情况：当前线程不是目标线程，需要唤醒跨线程调用；
+	 * 第二种情况：dopendingFunctors()在处理任务队列过程中，回调函数可能再次通过queueInLoop
+	 * 			 再次向任务队列继续添加任务，此时也需要唤醒事件循环线程
+	 *  	     使得在下次事件循环中后添加的任务被及时处理；                         */
+    if (!isInLoopThread() || callingPendingFunctors_)
+    {
+        wakeup();
+    }
 }
 
 size_t EventLoop::queueSize() const

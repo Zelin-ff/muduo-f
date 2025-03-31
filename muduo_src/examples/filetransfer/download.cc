@@ -1,6 +1,7 @@
 #include "muduo/base/Logging.h"
 #include "muduo/net/EventLoop.h"
 #include "muduo/net/TcpServer.h"
+#include "muduo/base/FileUtil.h"
 
 #include <stdio.h>
 #include <unistd.h>
@@ -9,6 +10,7 @@ using namespace muduo;
 using namespace muduo::net;
 
 const char* g_file = NULL;
+const int kBufSize = 1024 * 1024;
 
 // FIXME: use FileUtil::readFile()
 string readFile(const char* filename)
@@ -18,7 +20,6 @@ string readFile(const char* filename)
   if (fp)
   {
     // inefficient!!!
-    const int kBufSize = 1024*1024;
     char iobuf[kBufSize];
     ::setbuffer(fp, iobuf, sizeof iobuf);
 
@@ -48,8 +49,11 @@ void onConnection(const TcpConnectionPtr& conn)
     LOG_INFO << "FileServer - Sending file " << g_file
              << " to " << conn->peerAddress().toIpPort();
     conn->setHighWaterMarkCallback(onHighWaterMark, 64*1024);
-    string fileContent = readFile(g_file);
-    conn->send(fileContent);
+    //string fileContent = readFile(g_file);
+    //conn->send(fileContent);            // 打印调用栈
+
+    string fileContent;
+    muduo::FileUtil::readFile(g_file, kBufSize, &fileContent);
     conn->shutdown();
     LOG_INFO << "FileServer - done";
   }
@@ -63,7 +67,7 @@ int main(int argc, char* argv[])
     g_file = argv[1];
 
     EventLoop loop;
-    InetAddress listenAddr(2021);
+    InetAddress listenAddr(2021);       // 创建一个地址端口号：0.0.0.0 2021
     TcpServer server(&loop, listenAddr, "FileServer");
     server.setConnectionCallback(onConnection);
     server.start();

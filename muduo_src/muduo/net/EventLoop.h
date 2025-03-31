@@ -69,7 +69,7 @@ class EventLoop : noncopyable
   /// If in the same loop thread, cb is run within the function.
   /// Safe to call from other threads.
   void runInLoop(Functor cb);
-  /// Queues callback in the loop thread.
+  /// 唤醒loop对应的线程，执行回调
   /// Runs after finish pooling.
   /// Safe to call from other threads.
   void queueInLoop(Functor cb);
@@ -146,10 +146,9 @@ class EventLoop : noncopyable
   Timestamp pollReturnTime_;
   std::unique_ptr<Poller> poller_;
   std::unique_ptr<TimerQueue> timerQueue_;
-  int wakeupFd_;
-  // unlike in TimerQueue, which is an internal class,
-  // we don't expose Channel to client.
-  std::unique_ptr<Channel> wakeupChannel_;	// 处理 wakeupFd_ 上的可读事件
+
+  int wakeupFd_;                // 用于跨线程唤醒的fd，这里不封装为Socket
+  std::unique_ptr<Channel> wakeupChannel_;	// 管理 wakeupFd_ 上的可读事件
   boost::any context_;
 
   // scratch variables

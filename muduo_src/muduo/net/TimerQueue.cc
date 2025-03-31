@@ -143,16 +143,16 @@ void TimerQueue::cancelInLoop(TimerId timerId)
 {
   loop_->assertInLoopThread();
   assert(timers_.size() == activeTimers_.size());
-  ActiveTimer timer(timerId.timer_, timerId.sequence_);		/* 得到Timer的地址和序列号 */
-  ActiveTimerSet::iterator it = activeTimers_.find(timer);	/* 获取待注销Timer的索引 */
+  ActiveTimer timer(timerId.timer_, timerId.sequence_);	    // 获取目标Timer的地址和序列号
+  ActiveTimerSet::iterator it = activeTimers_.find(timer);  // 存活定时器集合中 find 
   if (it != activeTimers_.end())
-  {
-    size_t n = timers_.erase(Entry(it->first->expiration(), it->first));	/* 删除定时器 */
+  {                                 //（1）找到目标定时器后直接从队列中 erase
+    size_t n = timers_.erase(Entry(it->first->expiration(), it->first));
     assert(n == 1); (void)n;
     delete it->first; // FIXME: no delete please
     activeTimers_.erase(it);
   }
-  else if (callingExpiredTimers_) /* 如果到期定时器在执行注销操作，那就暂时先放到注销队列中 */
+  else if (callingExpiredTimers_)   //（2）如果到期定时器正在执行注销操作，就暂时放到待注销队列中
   {
     cancelingTimers_.insert(timer);
   }
@@ -167,8 +167,8 @@ void TimerQueue::handleRead()
 
   std::vector<Entry> expired = getExpired(now);
 
-  callingExpiredTimers_ = true;
-  cancelingTimers_.clear();
+  callingExpiredTimers_ = true; // 使得在cancel操作中将当前定时器暂时放入待注销队列中
+  cancelingTimers_.clear();     // 防止已注销的定时器被重新启用或错误执行，reset()中可能会发生
   // safe to callback outside critical section
   for (const Entry& it : expired)	/* 执行所有到期定时器的回调 */
   {

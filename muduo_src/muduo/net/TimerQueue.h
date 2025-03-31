@@ -73,13 +73,13 @@ class TimerQueue : noncopyable
   const int timerfd_;           // timerfd_create()
   Channel timerfdChannel_;      // 构造时初始化
   
-  // Timer list sorted by expiration
-  TimerList timers_;
+  // 有序（到期时间）的定时器列表
+  TimerList timers_;            // timers_begin()就是最近到期的定时器
 
-  // for cancel()
-  ActiveTimerSet activeTimers_;		/* 保存有效的Timer指针 */
-  bool callingExpiredTimers_; 		/* atomic */
-  ActiveTimerSet cancelingTimers_;	/* 保存被注销Timer的指针 */
+  // 用于快速cancel()定时器
+  ActiveTimerSet activeTimers_;		// 存活的定时器集合，按TimerId排序，便于快速查找要取消的定时器
+  bool callingExpiredTimers_; 		// 应对“自注销”操作，表示是否在执行到期定时器的回调
+  ActiveTimerSet cancelingTimers_;	// 保存需要被注销Timer的指针
 };
 
 }  // namespace net

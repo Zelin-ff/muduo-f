@@ -42,8 +42,8 @@ namespace net
 class Buffer : public muduo::copyable
 {
  public:
-  static const size_t kCheapPrepend = 8;
-  static const size_t kInitialSize = 1024;
+  static const size_t kCheapPrepend = 8;    // 定义 prependable 初始大小
+  static const size_t kInitialSize = 1024;  // 定义 writable 初始大小
 
   explicit Buffer(size_t initialSize = kInitialSize)
     : buffer_(kCheapPrepend + initialSize),
@@ -57,7 +57,9 @@ class Buffer : public muduo::copyable
 
   // implicit copy-ctor, move-ctor, dtor and assignment are fine
   // NOTE: implicit move-ctor is added in g++ 4.6
-
+  // 
+  // 跨线程的函数转移调用涉及函数参数的跨线程传递，简单做法就是拷贝一份
+  // 高效的线程间数据转移 swap()
   void swap(Buffer& rhs)
   {
     buffer_.swap(rhs.buffer_);
@@ -65,16 +67,16 @@ class Buffer : public muduo::copyable
     std::swap(writerIndex_, rhs.writerIndex_);
   }
 
-  size_t readableBytes() const
+  size_t readableBytes() const      // 可读出的数据大小
   { return writerIndex_ - readerIndex_; }
 
-  size_t writableBytes() const
+  size_t writableBytes() const      // 可写入的数据大小
   { return buffer_.size() - writerIndex_; }
 
-  size_t prependableBytes() const
+  size_t prependableBytes() const   // 查看 prependable
   { return readerIndex_; }
 
-  const char* peek() const			/* 返回可读数据的指针 */
+  const char* peek() const			// 返回可读数据的指针
   { return begin() + readerIndex_; }
 
   const char* findCRLF() const
@@ -107,10 +109,8 @@ class Buffer : public muduo::copyable
     return static_cast<const char*>(eol);
   }
 
-  // retrieve returns void, to prevent
-  // string str(retrieve(readableBytes()), readableBytes());
-  // the evaluation of two functions are unspecified
-  void retrieve(size_t len)			/* 从缓冲区取出len字节的数据 */
+  // 更新索引位置
+  void retrieve(size_t len)
   {
     assert(len <= readableBytes());
     if (len < readableBytes())
@@ -149,23 +149,23 @@ class Buffer : public muduo::copyable
   {
     retrieve(sizeof(int8_t));
   }
-
-  void retrieveAll()		/* 取出所有可读数据 */
+  // 可读、可写索引初始化
+  void retrieveAll()
   {
     readerIndex_ = kCheapPrepend;
     writerIndex_ = kCheapPrepend;
   }
 
-  string retrieveAllAsString()
+  string retrieveAllAsString()  // 获取缓冲区所有可读数据，以 string 类型返回
   {
     return retrieveAsString(readableBytes());
   }
-
+  // 获取数据后以 string 类型返回
   string retrieveAsString(size_t len)
   {
     assert(len <= readableBytes());
-    string result(peek(), len);
-    retrieve(len);
+    string result(peek(), len);     // 获取string数据
+    retrieve(len);                  // 更新readIndex_
     return result;
   }
 
@@ -174,11 +174,12 @@ class Buffer : public muduo::copyable
     return StringPiece(peek(), static_cast<int>(readableBytes()));
   }
 
+  // 添加数据到缓冲区
   void append(const StringPiece& str)
   {
     append(str.data(), str.size());
   }
-
+  // 会先检查容量再进行添加
   void append(const char* /*restrict*/ data, size_t len)
   {
     ensureWritableBytes(len);
@@ -191,6 +192,7 @@ class Buffer : public muduo::copyable
     append(static_cast<const char*>(data), len);
   }
 
+  // 写入数据前确保可写空间足够
   void ensureWritableBytes(size_t len)
   {
     if (writableBytes() < len)
@@ -206,6 +208,7 @@ class Buffer : public muduo::copyable
   const char* beginWrite() const
   { return begin() + writerIndex_; }
 
+  // 写入数据后更新 writeIndex_
   void hasWritten(size_t len)
   {
     assert(len <= writableBytes());
@@ -350,7 +353,7 @@ class Buffer : public muduo::copyable
   {
     prepend(&x, sizeof x);
   }
-
+  // 很低的代价在数据前面添加几个字节，比如可读数据的长度
   void prepend(const void* /*restrict*/ data, size_t len)
   {
     assert(len <= prependableBytes());
@@ -373,10 +376,11 @@ class Buffer : public muduo::copyable
     return buffer_.capacity();
   }
 
-  /// 系统调用read读取数据到buffer
-  /// It may implement with readv(2)
-  /// @return result of read(2), @c errno is saved
+  // 从TCP连接的接收缓冲区读取数据到当前 Buffer
   ssize_t readFd(int fd, int* savedErrno);
+  // 发送数据
+  ssize_t writeFd(int fd, int* saveErrno);
+
 
  private:
 
@@ -386,6 +390,8 @@ class Buffer : public muduo::copyable
   const char* begin() const
   { return &*buffer_.begin(); }
 
+// 优先腾挪空间：如果空间够用，向前移动可读数据腾出 writable
+// 否则 buffer_.resize()扩容
   void makeSpace(size_t len)
   {
     if (writableBytes() + prependableBytes() < len + kCheapPrepend)
@@ -408,9 +414,9 @@ class Buffer : public muduo::copyable
   }
 
  private:
-  std::vector<char> buffer_;		/* 实际存储数据容器便于动态扩容 */
-  size_t readerIndex_;				/* 可读数据的起始位置 */
-  size_t writerIndex_;				/* 可写数据的起始位置 */
+  std::vector<char> buffer_;		// Buffer 通过 vector 容器实现，便于动态扩容
+  size_t readerIndex_;				// 可读缓冲区的起始位置
+  size_t writerIndex_;				// 可写缓冲区的起始位置
 
   static const char kCRLF[];
 };

@@ -49,6 +49,7 @@ class Socket : noncopyable
   /// abort if address in use
   void bindAddress(const InetAddress& localaddr);
   /// abort if address in use
+  // 系统调用 ::listen 开始监听
   void listen();
 
   /// On success, returns a non-negative integer that is
