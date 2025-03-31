@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "muduo_f", "muduo_f.vcxproj", "{ECD988D6-00B3-4B12-98AF-480B98AEBCB3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ECD988D6-00B3-4B12-98AF-480B98AEBCB3}.Debug|x64.ActiveCfg = Debug|x64
+		{ECD988D6-00B3-4B12-98AF-480B98AEBCB3}.Debug|x64.Build.0 = Debug|x64
+		{ECD988D6-00B3-4B12-98AF-480B98AEBCB3}.Debug|x86.ActiveCfg = Debug|Win32
+		{ECD988D6-00B3-4B12-98AF-480B98AEBCB3}.Debug|x86.Build.0 = Debug|Win32
+		{ECD988D6-00B3-4B12-98AF-480B98AEBCB3}.Release|x64.ActiveCfg = Release|x64
+		{ECD988D6-00B3-4B12-98AF-480B98AEBCB3}.Release|x64.Build.0 = Release|x64
+		{ECD988D6-00B3-4B12-98AF-480B98AEBCB3}.Release|x86.ActiveCfg = Release|Win32
+		{ECD988D6-00B3-4B12-98AF-480B98AEBCB3}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7F4BB013-5FEC-4BAA-9AA1-E80E1A366B42}
+	EndGlobalSection
+EndGlobal

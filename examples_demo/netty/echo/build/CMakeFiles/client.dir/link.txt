@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/client.dir/echoClient.cc.o -o client  -lmuduo_net -lmuduo_base -lpthread 
