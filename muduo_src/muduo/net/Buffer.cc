@@ -32,7 +32,7 @@ ssize_t Buffer::readFd(int fd, int* savedErrno)
   vec[0].iov_len = writable;
   vec[1].iov_base = extrabuf;               // iovec[1]指向 extrabuf
   vec[1].iov_len = sizeof extrabuf;
-  //（2）当 writable 不足时再使用栈上内存 extrabuf
+  //（2）当前buffer_的 writable 不足时再使用栈上内存 extrabuf
   const int iovcnt = (writable < sizeof extrabuf) ? 2 : 1;
   //（3）readv 散读特性读取数据
   const ssize_t n = sockets::readv(fd, vec, iovcnt);

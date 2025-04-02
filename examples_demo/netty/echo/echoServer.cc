@@ -1,5 +1,4 @@
-﻿//#include <functional>
-#include "muduo/net/TcpServer.h"
+﻿#include "muduo/net/TcpServer.h"
 
 #include "muduo/base/Atomic.h"		// 原子操作，确保线程安全
 #include "muduo/base/FileUtil.h"

@@ -84,9 +84,25 @@ string TcpConnection::getTcpInfoString() const
   return buf;
 }
 
+//void TcpConnection::send(const std::string& message) {
+//    if (state_ == kConnected) {
+//        if (loop_->isInLoopThread()) {
+//            sendInLoop(message.c_str(), message.size());
+//        }
+//        else {
+//            loop_->runInLoop(std::bind(
+//                &TcpConnection::sendInLoop,
+//                this,
+//                message.c_str(),
+//                message.size())
+//            );
+//        }
+//    }
+//}
+
 void TcpConnection::send(const void* data, int len)
 {
-  send(StringPiece(static_cast<const char*>(data), len));
+    send(StringPiece(static_cast<const char*>(data), len));
 }
 
 void TcpConnection::send(const StringPiece& message)
